@@ -1,0 +1,10 @@
+{
+  "name": "BinaryJuggle-Editor",
+  "references": [
+    "BinaryJuggle"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}
