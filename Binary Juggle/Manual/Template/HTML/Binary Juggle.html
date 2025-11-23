@@ -1,59 +1,308 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1">
-    <title>Module Name — Keep Talking and Nobody Explodes Module</title>
-    <link rel="stylesheet" type="text/css" href="css/font.css">
-    <link rel="stylesheet" type="text/css" href="css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <script src="js/ktane-utils.js"></script>
-    <!-- Remove the whole style tag if empty -->
-    <style>
-        /* Remove this if you do not have any tables */
-        table {
-            margin: 1em auto;
-            border: none;
-        }
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Binary Juggle — Keep Talking and Nobody Explodes Module</title>
+	<link rel="stylesheet" type="text/css" href="css/font.css" />
+	<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<script src="js/ktane-utils.js"></script>
+	<!-- Remove the whole style tag if empty -->
+	<style>
+		/* Remove this if you do not have any tables */
+		table {
+			margin: 1em auto;
+			border: none;
+		}
 
-        /* Remove this if you only have a single page */
-        .page-footer::before { content: 'Page '; }
-        .page-footer::after { content: ' of 2'; }
-    </style>
+		.dark .binary-table,
+		.binary-table {
+			margin: 1em auto;
+			border: none;
+			border-collapse: collapse;
+			text-align: center;
+		}
+
+		.binary-table td img {
+			display: block;
+			max-width: 45px;
+		}
+
+		.dark img.icon {
+			filter: invert(1);
+		}
+
+		.ball-characteristics {
+			columns: 2;
+			width: 35%;
+		}
+
+		.juggle-amount li {
+			margin: 0.5em auto;
+		}
+
+		.three-col {
+			display: grid;
+			grid-template-columns: auto auto auto;
+			justify-content: center;
+			gap: 25px;
+			text-align: center;
+			margin: 1em 0;
+		}
+
+		/* Remove this if you only have a single page */
+		.page-footer::before {
+			content: "Page ";
+		}
+
+		.page-footer::after {
+			content: " of 2";
+		}
+	</style>
 </head>
+
 <body>
-    <div class="section">
-        <div class="page page-bg-01">
-            <div class="page-header">
-                <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
-                <span class="page-header-section-title">Module Name</span>
-            </div>
-            <div class="page-content">
-                <img src="img/Component/Module Name.svg" class="diagram">
-                <h2>On the Subject of Module Name</h2>
-                <p class="flavour-text">Your flavor text should go here.</p>
+	<div class="section">
+		<div class="page page-bg-01">
+			<div class="page-header">
+				<span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+				<span class="page-header-section-title">Binary Juggle</span>
+			</div>
+			<div class="page-content">
+				<img src="img/Component/Binary Juggle.svg" class="diagram" />
+				<h2>On the Subject of Binary Juggle</h2>
+				<p class="flavour-text">
+					This module takes "juggling numbers" to another level.
+				</p>
+				<p>
+					The module will start juggling an even number of balls. Each ball
+					has 4 informations you need to note down in order to solve the
+					module.
+				</p>
+				<ul class="ball-characteristics">
+					<li>Color</li>
+					<li>Symbol</li>
+					<li>Rotation</li>
+					<li>Direction</li>
+				</ul>
+				<p>
+					With these 4 characteristics of each ball, determine the
+					corresponding binary digit from the table below.
+				</p>
+				<table class="binary-table">
+					<tbody>
+						<tr>
+							<td colspan="2" rowspan="2" style="border-top: none; border-left: none"></td>
+							<th colspan="4">Clockwise</th>
+							<th colspan="4">Counterclockwise</th>
+						</tr>
+						<tr>
+							<td>
+								<img src="img/Binary Juggle/HatTrans.png" class="icon" />
+							</td>
+							<td>
+								<img src="img/Binary Juggle/JesterTrans.png" class="icon" />
+							</td>
+							<td>
+								<img src="img/Binary Juggle/PinTrans.png" class="icon" />
+							</td>
+							<td>
+								<img src="img/Binary Juggle/WeightTrans.png" class="icon" />
+							</td>
+							<td>
+								<img src="img/Binary Juggle/HatTrans.png" class="icon" />
+							</td>
+							<td>
+								<img src="img/Binary Juggle/JesterTrans.png" class="icon" />
+							</td>
+							<td>
+								<img src="img/Binary Juggle/PinTrans.png" class="icon" />
+							</td>
+							<td>
+								<img src="img/Binary Juggle/WeightTrans.png" class="icon" />
+							</td>
+						</tr>
+						<tr>
+							<th rowspan="4">Left</th>
+							<td>Red</td>
+							<td>1</td>
+							<td>0</td>
+							<td>1</td>
+							<td>1</td>
+							<td>0</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0</td>
+						</tr>
+						<tr>
+							<td>Green</td>
+							<td>0</td>
+							<td>1</td>
+							<td>1</td>
+							<td>0</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>Blue</td>
+							<td>1</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0</td>
+							<td>0</td>
+							<td>1</td>
+							<td>1</td>
+							<td>0</td>
+						</tr>
+						<tr>
+							<td>Magenta</td>
+							<td>0</td>
+							<td>0</td>
+							<td>1</td>
+							<td>1</td>
+							<td>1</td>
+							<td>0</td>
+							<td>1</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<th rowspan="4">Right</th>
+							<td>Red</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0</td>
+							<td>1</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>Green</td>
+							<td>0</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0</td>
+							<td>1</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0</td>
+						</tr>
+						<tr>
+							<td>Blue</td>
+							<td>1</td>
+							<td>0</td>
+							<td>1</td>
+							<td>0</td>
+							<td>1</td>
+							<td>1</td>
+							<td>0</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>Magenta</td>
+							<td>0</td>
+							<td>1</td>
+							<td>0</td>
+							<td>1</td>
+							<td>0</td>
+							<td>0</td>
+							<td>1</td>
+							<td>0</td>
+						</tr>
+					</tbody>
+				</table>
+				<h3>Determine the amount of juggling</h3>
 
-                <p>First sentence.</p>
-                <ul>
-                    <li>Or as classic bullet points</li>
-                    <li>Step 1</li>
-                    <li>Step 2</li>
-                </ul>
-            </div>
-            <div class="page-footer relative-footer">1</div>
-        </div>
+				<ul class="juggle-amount">
+					<li>
+						If the amount of balls moving to the right is greater than balls
+						that are rotating counterclockwise, juggle according to how many
+						1s are in your binary string.
+					</li>
+					<li>
+						Otherwise, if the amount of balls moving to the left is greater
+						than balls that are rotating clockwise, juggle based on the number
+						of 0s in your binary string.
+					</li>
+					<li>
+						Otherwise, juggle based on the difference between the number of 1s
+						and 0s.
+					</li>
+				</ul>
+			</div>
+			<div class="page-footer relative-footer">1</div>
+		</div>
 
-        <div class="page page-bg-02">
-            <div class="page-header">
-                <span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
-                <span class="page-header-section-title">Module Name</span>
-            </div>
-            <div class="page-content">
-                <h3>Section</h3>
-                <p>More info.</p>
-            </div>
-            <div class="page-footer relative-footer">2</div>
-        </div>
-    </div>
+		<div class="page page-bg-02">
+			<div class="page-header">
+				<span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
+				<span class="page-header-section-title">Binary Juggle</span>
+			</div>
+			<div class="page-content">
+				<h3>How to Juggle numbers the correct way</h3>
+				<ol>
+					<li>
+						To juggle the binary string, split the string in the middle into
+						two equal halves.
+					</li>
+				</ol>
+
+				<div class="three-col">
+					<div>0110101011</div>
+					<div>&rarr;</div>
+					<div>01101 | 01011</div>
+				</div>
+
+				<ol start="2">
+					<li>
+						For each juggle, take the leftmost digit of the right half and
+						append it to the left side of the left half.
+					</li>
+				</ol>
+
+				<div class="three-col">
+					<div>
+						01101 | <u><b>0</b></u>1011
+					</div>
+					<div>&rarr;</div>
+					<div>
+						<u><b>0</b></u>01101 | 1011
+					</div>
+				</div>
+
+				<ol start="3">
+					<li>
+						Then take the rightmost digit of the left half and append it to
+						the right side of the right half.
+					</li>
+				</ol>
+
+				<div class="three-col">
+					<div>
+						00110<u><b>1</b></u> | 1011
+					</div>
+					<div>&rarr;</div>
+					<div>
+						00110 | <u><b>1</b></u>0111
+					</div>
+				</div>
+
+				<p>
+					Repeat steps 2 and 3 according to your determined juggle amount.
+					After you finish juggling, join the two halves back together and
+					press every ball whose position corresponds to a 1 in the final
+					binary string. When all the correct balls are pressed, the module is
+					solved.
+				</p>
+			</div>
+			<div class="page-footer relative-footer">2</div>
+		</div>
+	</div>
 </body>
+
 </html>

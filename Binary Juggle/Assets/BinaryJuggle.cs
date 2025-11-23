@@ -8,12 +8,15 @@ using KModkit;
 using ZT = ZToolsKtane;
 using Rnd = UnityEngine.Random;
 using Math = ExMath;
+using static Enums;
+using NUnit.Framework;
 
-public class BinaryJuggle : MonoBehaviour
+public partial class BinaryJuggle : MonoBehaviour
 {
 
     public KMBombInfo Bomb;
     public KMAudio Audio;
+    public KMSelectable Select;
 
     static int ModuleIdCounter = 1;
     int ModuleId;
@@ -45,12 +48,39 @@ public class BinaryJuggle : MonoBehaviour
 
     void Start()
     { //Shit that you calculate, usually a majority if not all of the module
-
+        
     }
 
     void Update()
     { //Shit that happens at any point after initialization
 
+    }
+
+    void GenerateCycle()
+    {
+        List<Ball> firstBallList = CreateBallList(4);
+        List<Ball> secondBallList = CreateBallList(6);
+    }
+
+    List<Ball> CreateBallList(int count)
+    {
+        List<Ball> list = new List<Ball>();
+
+        int colorLength = Enum.GetValues(typeof(Enums.Color)).Length;
+        int symbolLength = Enum.GetValues(typeof(Symbol)).Length;
+        int rotationLength = Enum.GetValues(typeof(Rotation)).Length;
+        int directionLength = Enum.GetValues(typeof(Direction)).Length;
+
+        for (int i = 0; i < count; i++)
+        {
+            var color = (Enums.Color)Rnd.Range(0, colorLength);
+            var symbol = (Symbol)Rnd.Range(0, symbolLength);
+            var rotation = (Rotation)Rnd.Range(0, rotationLength);
+            var direction = (Direction)Rnd.Range(0, directionLength);
+
+            list.Add(new Ball(color, symbol, rotation, direction));
+        }
+        return list;
     }
 
     void Solve()
