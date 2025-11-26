@@ -10,6 +10,7 @@ using Rnd = UnityEngine.Random;
 using Math = ExMath;
 using static Enums;
 using HarmonyLib;
+using System.Reflection;
 
 public partial class BinaryJuggle : MonoBehaviour
 {
@@ -65,16 +66,42 @@ public partial class BinaryJuggle : MonoBehaviour
 
     void GenerateCycle()
     {
-        firstBallList = CreateBallList(6);   // Balls used in phase 1
-        secondBallList = CreateBallList(8);  // these for phase 2
+        // Complete Setup for Balls Stage 1
+        Debug.LogFormat("[Binary Juggle #{0}] Stage 1:", ModuleId);
 
-        // Making sure there is a mix of balls that need a click and balls that dont
+        firstBallList = CreateBallList(6);
+
         while (firstBallList.Where(x => x.isOne).Count() == 0 || firstBallList.Where(x => !x.isOne).Count() == 0)
             firstBallList = CreateBallList(6);
+
+        int index = 0;
+
+        foreach (Ball ball in firstBallList)
+        {
+            Debug.LogFormat("[Binary Juggle #{0}] Ball {1} || Color: {2}, Symbol: {3}, Rotation: {4}, Direction: {5}",
+                ModuleId, index + 1, firstBallList[index].color.ToString(), firstBallList[index].symbol.ToString(), firstBallList[index].rotation.ToString(), firstBallList[index].direction.ToString());
+            index++;
+        }
+
+        GetBallsToClick(firstBallList);
+
+        // Complete Setup for Balls Stage 2
+        Debug.LogFormat("[Binary Juggle #{0}] Stage 2:", ModuleId);
+
+        secondBallList = CreateBallList(8);
+
         while (secondBallList.Where(x => x.isOne).Count() == 0 || secondBallList.Where(x => !x.isOne).Count() == 0)
             secondBallList = CreateBallList(8);
 
-        GetBallsToClick(firstBallList);
+        index = 0;
+
+        foreach (Ball ball in secondBallList)
+        {
+            Debug.LogFormat("[Binary Juggle #{0}] Ball {1} || Color: {2}, Symbol: {3}, Rotation: {4}, Direction: {5}",
+                ModuleId, index + 1, secondBallList[index].color.ToString(), secondBallList[index].symbol.ToString(), secondBallList[index].rotation.ToString(), secondBallList[index].direction.ToString());
+            index++;
+        }
+
         GetBallsToClick(secondBallList);
     }
 
@@ -105,20 +132,18 @@ public partial class BinaryJuggle : MonoBehaviour
         {
             Binary += ball.isOne ? "1" : "0";
         }
+        Debug.LogFormat("[Binary Juggle #{0}] Binary: {1}", ModuleId, Binary);
 
         // Split in 2 Halfes
         string leftBinary = Binary.Substring(0, Binary.Length/2);
         string rightBinary = Binary.Substring(Binary.Length/2);
-
-        Binary = JuggleBinary(leftBinary, rightBinary, GetJuggleAmount(Binary));
-
+        Binary = JuggleBinary(leftBinary, rightBinary, GetJuggleAmount(Binary, balls));
         for (int i = 0;i < balls.Count; i++)
         {
             if (Binary[i] == '1')
                 balls[i].needsClick = true;
         }
     }
-
     string JuggleBinary(string leftBinary, string rightBinary, int JuggleAmount)
     {
         for (int i = 0; i < JuggleAmount; i++)
@@ -131,14 +156,16 @@ public partial class BinaryJuggle : MonoBehaviour
             leftBinary = leftBinary.Remove(leftBinary.Length - 1, 1);
             rightBinary = rightBinary + fromLeft;
         }
-        return leftBinary + rightBinary;
+        string Binary = leftBinary + rightBinary;
+        Debug.LogFormat("[Binary Juggle #{0}] Binary after juggling: {1}", ModuleId, Binary);
+        return Binary;
     }
 
-    int GetJuggleAmount(string binary)
+    int GetJuggleAmount(string binary, List<Ball> balls)
     {
         int juggleAmount = 0;
 
-        if (firstBallList.Where(x => x.direction == BallDirection.Right).Count() > firstBallList.Where(x => x.rotation == Rotation.Counterclockwise).Count())
+        if (balls.Where(x => x.direction == BallDirection.Right).Count() > balls.Where(x => x.rotation == Rotation.Counterclockwise).Count())
         {
             foreach (var ones in binary)
             {
@@ -146,7 +173,7 @@ public partial class BinaryJuggle : MonoBehaviour
                     juggleAmount++;
             }
         }
-        else if (firstBallList.Where(x => x.direction == BallDirection.Left).Count() > firstBallList.Where(x => x.rotation == Rotation.Clockwise).Count())
+        else if (balls.Where(x => x.direction == BallDirection.Left).Count() > balls.Where(x => x.rotation == Rotation.Clockwise).Count())
         {
             foreach (var ones in binary)
             {
@@ -168,7 +195,7 @@ public partial class BinaryJuggle : MonoBehaviour
             }
             juggleAmount = Mathf.Abs(one - zero);
         }
-
+        Debug.LogFormat("[Binary Juggle #{0}] The amount of times to juggle: {1}", ModuleId, juggleAmount);
         return juggleAmount;
     }
 
@@ -194,7 +221,6 @@ public partial class BinaryJuggle : MonoBehaviour
             GetSymbolForBall(BallsStage2[i].GetComponent<MeshRenderer>(), secondBallList[i].symbol);
             GetColorForBall(BallsStage2[i].GetComponent<MeshRenderer>(), secondBallList[i].color);
         }
-        Debug.Log("Done");
     }
 
     void GetColorForBall(MeshRenderer BallMeshRen, BallColor col)
@@ -237,34 +263,6 @@ public partial class BinaryJuggle : MonoBehaviour
                 break;
             default:
                 Debug.Log("No Symbol Found!");
-                break;
-        }
-    }
-
-    void GetRotationForBall(GameObject Ball, Rotation rot)
-    {
-        switch (rot)
-        {
-            case Rotation.Clockwise:
-                break;
-            case Rotation.Counterclockwise:
-                break;
-            default:
-                Debug.Log("No Rotation Found!");
-                break;
-        }
-    }
-
-    void GetDirectionForBall(GameObject Ball, BallDirection dir)
-    {
-        switch (dir)
-        {
-            case BallDirection.Left:
-                break;
-            case BallDirection.Right:
-                break;
-            default:
-                Debug.Log("No Direction Found!");
                 break;
         }
     }
@@ -318,6 +316,7 @@ public partial class BinaryJuggle : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         float timeBetweenBalls = 0.85f;
+        float timeBetweenLoops = 2.35f;
         int index = 0;
         while (true)
         {
@@ -332,7 +331,7 @@ public partial class BinaryJuggle : MonoBehaviour
 
             if (index == maxIndex) // Loop Reset
             {
-                yield return new WaitForSeconds(timeBetweenBalls + 1.5f);
+                yield return new WaitForSeconds(timeBetweenLoops);
                 index = 0;
             }
         }
@@ -407,6 +406,7 @@ public partial class BinaryJuggle : MonoBehaviour
         }
         else if (Stage == 2)
         {
+            if (index < 6) return;
             if (secondBallList[index - 6].needsClick)
             {
                 secondBallList[index - 6].needsClick = false;
@@ -469,12 +469,11 @@ public partial class BinaryJuggle : MonoBehaviour
     {
         GetComponent<KMBombModule>().HandleStrike();
     }
-    /* Delete this if you dont want TP integration
 #pragma warning disable 414
     private readonly string TwitchHelpMessage = @"Use !{0} to do something.";
 #pragma warning restore 414
 
-    IEnumerator ProcessTwitchCommand(string Command)
+    IEnumerator ProcessTwitchCommand(string command)
     {
         yield return null;
     }
@@ -482,5 +481,5 @@ public partial class BinaryJuggle : MonoBehaviour
     IEnumerator TwitchHandleForcedSolve()
     {
         yield return null;
-    }*/
+    }
 }
