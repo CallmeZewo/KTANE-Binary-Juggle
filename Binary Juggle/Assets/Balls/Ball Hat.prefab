@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 33432462558617538}
   - component: {fileID: 23130330845613942}
   - component: {fileID: 114334517179795028}
+  - component: {fileID: 114068896024455274}
   m_Layer: 0
   m_Name: Ball Hat
   m_TagString: Untagged
@@ -121,6 +122,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1414788114665966}
   m_Mesh: {fileID: 4300000, guid: 12900daf781cb464399d90a96e136477, type: 3}
+--- !u!114 &114068896024455274
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1873144973116382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d945cfaba4407aa4aa65056f4bdcdc2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startRight: {fileID: 0}
+  startLeft: {fileID: 0}
+  endRight: {fileID: 0}
+  endLeft: {fileID: 0}
 --- !u!114 &114334517179795028
 MonoBehaviour:
   m_ObjectHideFlags: 1

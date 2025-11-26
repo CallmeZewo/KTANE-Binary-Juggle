@@ -25,6 +25,18 @@
 			text-align: center;
 		}
 
+		.thick-border-cell-top td,
+		.thick-border-cell-top th,
+		.dark .thick-border-cell-top td,
+		.dark .thick-border-cell-top th {
+			border-top-width: 2.497px;
+		}
+
+		.thick-border-cell-right,
+		.dark .thick-border-cell-right {
+			border-right-width: 2.497px;
+		}
+
 		.binary-table td img {
 			display: block;
 			max-width: 45px;
@@ -95,7 +107,7 @@
 					<tbody>
 						<tr>
 							<td colspan="2" rowspan="2" style="border-top: none; border-left: none"></td>
-							<th colspan="4">Clockwise</th>
+							<th class="thick-border-cell-right" colspan="4">Clockwise</th>
 							<th colspan="4">Counterclockwise</th>
 						</tr>
 						<tr>
@@ -108,7 +120,7 @@
 							<td>
 								<img src="img/Binary Juggle/PinTrans.png" class="icon" />
 							</td>
-							<td>
+							<td class="thick-border-cell-right">
 								<img src="img/Binary Juggle/WeightTrans.png" class="icon" />
 							</td>
 							<td>
@@ -127,10 +139,10 @@
 						<tr>
 							<th rowspan="4">Left</th>
 							<td>Red</td>
-							<td>1</td>
+							<td>0</td>
 							<td>0</td>
 							<td>1</td>
-							<td>1</td>
+							<td class="thick-border-cell-right">1</td>
 							<td>0</td>
 							<td>1</td>
 							<td>0</td>
@@ -138,21 +150,21 @@
 						</tr>
 						<tr>
 							<td>Green</td>
-							<td>0</td>
 							<td>1</td>
 							<td>1</td>
-							<td>0</td>
+							<td>1</td>
+							<td class="thick-border-cell-right">0</td>
 							<td>1</td>
 							<td>0</td>
 							<td>0</td>
 							<td>1</td>
 						</tr>
 						<tr>
-							<td>Blue</td>
+							<td>Yellow</td>
 							<td>1</td>
 							<td>1</td>
 							<td>0</td>
-							<td>0</td>
+							<td class="thick-border-cell-right">1</td>
 							<td>0</td>
 							<td>1</td>
 							<td>1</td>
@@ -163,19 +175,19 @@
 							<td>0</td>
 							<td>0</td>
 							<td>1</td>
-							<td>1</td>
+							<td class="thick-border-cell-right">0</td>
 							<td>1</td>
 							<td>0</td>
 							<td>1</td>
 							<td>1</td>
 						</tr>
-						<tr>
+						<tr class="thick-border-cell-top">
 							<th rowspan="4">Right</th>
 							<td>Red</td>
 							<td>1</td>
 							<td>0</td>
 							<td>0</td>
-							<td>1</td>
+							<td class="thick-border-cell-right">1</td>
 							<td>0</td>
 							<td>0</td>
 							<td>1</td>
@@ -186,18 +198,18 @@
 							<td>0</td>
 							<td>1</td>
 							<td>0</td>
-							<td>0</td>
+							<td class="thick-border-cell-right">0</td>
 							<td>1</td>
 							<td>1</td>
 							<td>0</td>
 							<td>0</td>
 						</tr>
 						<tr>
-							<td>Blue</td>
+							<td>Yellow</td>
 							<td>1</td>
 							<td>0</td>
 							<td>1</td>
-							<td>0</td>
+							<td class="thick-border-cell-right">0</td>
 							<td>1</td>
 							<td>1</td>
 							<td>0</td>
@@ -208,7 +220,7 @@
 							<td>0</td>
 							<td>1</td>
 							<td>0</td>
-							<td>1</td>
+							<td class="thick-border-cell-right">1</td>
 							<td>0</td>
 							<td>0</td>
 							<td>1</td>

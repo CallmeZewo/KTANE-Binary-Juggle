@@ -1,10 +1,10 @@
 ﻿public class Enums
 {
-    public enum Color
+    public enum BallColor
     {
         Red,
         Green,
-        Blue,
+        Yellow,
         Magenta
     }
 
@@ -21,9 +21,18 @@
         Clockwise,
         Counterclockwise
     }
-    public enum Direction
+
+    public enum BallDirection
     {
         Left,
         Right
+    }
+
+    public enum TransfromNames
+    {
+        BallSpawnRight,
+        BallSpawnLeft,
+        BallEndRight,
+        BallEndLeft
     }
 }
