@@ -18,6 +18,7 @@ public partial class BinaryJuggle : MonoBehaviour
     public KMBombInfo Bomb;
     public KMAudio Audio;
     public KMSelectable[] Buttons;
+    public TextMesh[] CBTexts;
 
     static int ModuleIdCounter = 1;
     int ModuleId;
