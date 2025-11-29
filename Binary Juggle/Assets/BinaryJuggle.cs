@@ -2,50 +2,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using UnityEngine;
-using KModkit;
-using ZT = ZToolsKtane;
 using Rnd = UnityEngine.Random;
-using Math = ExMath;
 using static Enums;
-using HarmonyLib;
-using System.Reflection;
 
-public partial class BinaryJuggle : MonoBehaviour
+public class BinaryJuggle : MonoBehaviour
 {
 
     public KMBombInfo Bomb;
     public KMAudio Audio;
+    public KMColorblindMode Colorblind;
     public KMSelectable[] Buttons;
     public TextMesh[] CBTexts;
-
-    static int ModuleIdCounter = 1;
-    int ModuleId;
-    private bool ModuleSolved;
+    static int moduleIdCounter = 1;
+    int moduleId;
+    private bool moduleSolved;
+    private bool cbActive;
 
     void Awake()
     { //Avoid doing calculations in here regarding edgework. Just use this for setting up buttons for simplicity.
-        ModuleId = ModuleIdCounter++;
-        GetComponent<KMBombModule>().OnActivate += Activate;
+        moduleId = moduleIdCounter++;
+
+        cbActive = Colorblind.ColorblindModeActive;
 
         foreach (KMSelectable button in Buttons) {
             button.OnInteract += delegate () { InputHandler(button); return false; };
         }
-
-        //button.OnInteract += delegate () { buttonPress(); return false; };
-
     }
 
-    void OnDestroy()
-    { //Shit you need to do when the bomb ends
-
-    }
-
-    void Activate()
-    { //Shit that should happen when the bomb arrives (factory)/Lights turn on
-
-    }
 
     void Start()
     { //Shit that you calculate, usually a majority if not all of the module
@@ -53,11 +37,6 @@ public partial class BinaryJuggle : MonoBehaviour
         AssignToBalls();
         StartCoroutine(AnimateBlendShape(SkinnedMeshRendererCurtain, 0, 100, 4.5f));
         ManageLoopingCycle();
-    }
-
-    void Update()
-    { //Shit that happens at any point after initialization
-
     }
 
     #region Getting Randoms
@@ -68,7 +47,7 @@ public partial class BinaryJuggle : MonoBehaviour
     void GenerateCycle()
     {
         // Complete Setup for Balls Stage 1
-        Debug.LogFormat("[Binary Juggle #{0}] Stage 1:", ModuleId);
+        Debug.LogFormat("[Binary Juggle #{0}] Stage 1:", moduleId);
 
         firstBallList = CreateBallList(6);
 
@@ -80,14 +59,14 @@ public partial class BinaryJuggle : MonoBehaviour
         foreach (Ball ball in firstBallList)
         {
             Debug.LogFormat("[Binary Juggle #{0}] Ball {1} || Color: {2}, Symbol: {3}, Rotation: {4}, Direction: {5}",
-                ModuleId, index + 1, firstBallList[index].color.ToString(), firstBallList[index].symbol.ToString(), firstBallList[index].rotation.ToString(), firstBallList[index].direction.ToString());
+                moduleId, index + 1, firstBallList[index].color.ToString(), firstBallList[index].symbol.ToString(), firstBallList[index].rotation.ToString(), firstBallList[index].direction.ToString());
             index++;
         }
 
         GetBallsToClick(firstBallList);
 
         // Complete Setup for Balls Stage 2
-        Debug.LogFormat("[Binary Juggle #{0}] Stage 2:", ModuleId);
+        Debug.LogFormat("[Binary Juggle #{0}] Stage 2:", moduleId);
 
         secondBallList = CreateBallList(8);
 
@@ -99,7 +78,7 @@ public partial class BinaryJuggle : MonoBehaviour
         foreach (Ball ball in secondBallList)
         {
             Debug.LogFormat("[Binary Juggle #{0}] Ball {1} || Color: {2}, Symbol: {3}, Rotation: {4}, Direction: {5}",
-                ModuleId, index + 1, secondBallList[index].color.ToString(), secondBallList[index].symbol.ToString(), secondBallList[index].rotation.ToString(), secondBallList[index].direction.ToString());
+                moduleId, index + 1, secondBallList[index].color.ToString(), secondBallList[index].symbol.ToString(), secondBallList[index].rotation.ToString(), secondBallList[index].direction.ToString());
             index++;
         }
 
@@ -133,7 +112,7 @@ public partial class BinaryJuggle : MonoBehaviour
         {
             Binary += ball.isOne ? "1" : "0";
         }
-        Debug.LogFormat("[Binary Juggle #{0}] Binary: {1}", ModuleId, Binary);
+        Debug.LogFormat("[Binary Juggle #{0}] Binary: {1}", moduleId, Binary);
 
         // Split in 2 Halfes
         string leftBinary = Binary.Substring(0, Binary.Length/2);
@@ -158,7 +137,7 @@ public partial class BinaryJuggle : MonoBehaviour
             rightBinary = rightBinary + fromLeft;
         }
         string Binary = leftBinary + rightBinary;
-        Debug.LogFormat("[Binary Juggle #{0}] Binary after juggling: {1}", ModuleId, Binary);
+        Debug.LogFormat("[Binary Juggle #{0}] Binary after juggling: {1}", moduleId, Binary);
         return Binary;
     }
 
@@ -196,7 +175,7 @@ public partial class BinaryJuggle : MonoBehaviour
             }
             juggleAmount = Mathf.Abs(one - zero);
         }
-        Debug.LogFormat("[Binary Juggle #{0}] The amount of times to juggle: {1}", ModuleId, juggleAmount);
+        Debug.LogFormat("[Binary Juggle #{0}] The amount of times to juggle: {1}", moduleId, juggleAmount);
         return juggleAmount;
     }
 
@@ -222,6 +201,23 @@ public partial class BinaryJuggle : MonoBehaviour
             GetSymbolForBall(BallsStage2[i].GetComponent<MeshRenderer>(), secondBallList[i].symbol);
             GetColorForBall(BallsStage2[i].GetComponent<MeshRenderer>(), secondBallList[i].color);
         }
+
+        AssignAllColorblind();
+    }
+
+    void AssignAllColorblind()
+    {
+        AssignColorblindToBalls(true, firstBallList.Select(x => x.color).ToArray());
+        AssignColorblindToBalls(false, secondBallList.Select(x => x.color).ToArray());
+    }
+
+    void AssignColorblindToBalls(bool stage1, BallColor[] colors)
+    {
+        for (int i = stage1 ? 0 : 6; i < (stage1 ? 6 : 14); i++)
+        {
+            CBTexts[i].text = cbActive ? colors[stage1 ? i : i - 6].ToString()[0].ToString() : string.Empty;
+            CBTexts[i].color = colors[stage1 ? i : i - 6] == BallColor.Yellow ? Color.black : Color.white;
+        }        
     }
 
     void GetColorForBall(MeshRenderer BallMeshRen, BallColor col)
@@ -306,7 +302,11 @@ public partial class BinaryJuggle : MonoBehaviour
     public void ManageLoopingCycle()
     {
         if (loopRoutine != null)
+        {
             StopCoroutine(loopRoutine);
+            loopRoutine = null;
+        }
+            
         if (Stage == 1)
             loopRoutine = StartCoroutine(LoopStage(firstBallList.Count));
         else if (Stage == 2)
@@ -463,6 +463,7 @@ public partial class BinaryJuggle : MonoBehaviour
 
     void Solve()
     {
+        moduleSolved = true;
         GetComponent<KMBombModule>().HandlePass();
     }
 
@@ -471,16 +472,96 @@ public partial class BinaryJuggle : MonoBehaviour
         GetComponent<KMBombModule>().HandleStrike();
     }
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"Use !{0} to do something.";
+    private readonly string TwitchHelpMessage = @"!{0} colorblind/cb [Toggles colorblind mode] || !{0} submit 2 3 5 7 [presses the number of balls you want to submit]";
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string command)
     {
-        yield return null;
+        string[] split = command.ToUpperInvariant().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+        switch (split[0])
+        {
+            case "COLORBLIND":
+            case "CB":
+                if (split.Length > 1)
+                {
+                    yield return "sendtochaterror Too many parameters!";
+                    yield break;
+                }
+                cbActive = !cbActive;
+                AssignAllColorblind();
+                yield break;
+            case "SUBMIT":
+                if (split.Length == 1)
+                {
+                    yield return "sendtochaterror Please specify which balls to press!";
+                    yield break;
+                }
+                var expectedStageLength = Stage == 1 ? 6 : 8;
+
+                if (split.Skip(1).Count() > expectedStageLength)
+                {
+                    yield return $"sendtochaterror Too many parameters! Please make sure your numbers to input is exactly {expectedStageLength}!";
+                    yield break;
+                }
+
+                var digitsToCheck = split.Skip(1).ToArray();
+
+                var numbersToPress = new int[digitsToCheck.Length];
+
+                for (int i = 0; i < numbersToPress.Length; i++)
+                {
+                    if (!int.TryParse(digitsToCheck[i], out numbersToPress[i]))
+                    {
+                        yield return $"sendtochaterror {digitsToCheck[i]} is not a valid number.";
+                        yield break;
+                    }
+                    else if (numbersToPress[i] < 1)
+                    {
+                        yield return $"sendtochaterror One or more numbers cannot go less than 1!";
+                        yield break;
+                    }
+
+                    numbersToPress[i]--;
+
+                    if (!Enumerable.Range(0, expectedStageLength).Contains(numbersToPress[i]))
+                    {
+                        yield return $"sendtochaterror Make sure the numbers are in the range of 1-{expectedStageLength} inclusive!";
+                        yield break;
+                    }
+                }
+
+                yield return null;
+
+                foreach (var number in numbersToPress)
+                {
+                    Buttons[Stage == 1 ? number : number + 6].OnInteract();
+                    yield return new WaitForSeconds(0.1f);
+                }
+                break;
+            default:
+                yield return "sendtochaterror This is not a valid command!";
+                yield break;
+        }
     }
 
     IEnumerator TwitchHandleForcedSolve()
     {
-        yield return null;
+        while (!moduleSolved)
+        {
+            while (loopRoutine == null)
+                yield return true;
+
+            var ballList = (Stage == 1 ? firstBallList : secondBallList).ToList();
+
+            for (int i = 0; i < ballList.Count; i++)
+            {
+                if (!ballList[i].needsClick)
+                    continue;
+
+                Buttons[Stage == 1 ? i : i + 6].OnInteract();
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
     }
 }
