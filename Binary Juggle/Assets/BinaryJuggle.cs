@@ -488,6 +488,7 @@ public class BinaryJuggle : MonoBehaviour
                     yield return "sendtochaterror Too many parameters!";
                     yield break;
                 }
+                yield return null;
                 cbActive = !cbActive;
                 AssignAllColorblind();
                 yield break;
