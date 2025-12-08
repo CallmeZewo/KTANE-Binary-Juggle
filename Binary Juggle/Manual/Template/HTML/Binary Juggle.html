@@ -89,9 +89,9 @@
 					This module takes "juggling numbers" to another level.
 				</p>
 				<p>
-					The module will start juggling an even number of balls. Each ball
-					has 4 informations you need to note down in order to solve the
-					module.
+					The module starts with 6 balls in the first stage,
+					then switches to 8 new balls in the second. Each ball presents 4
+					pieces of information you need to note down to solve the module.
 				</p>
 				<ul class="ball-characteristics">
 					<li>Color</li>
@@ -100,8 +100,9 @@
 					<li>Direction</li>
 				</ul>
 				<p>
-					With these 4 characteristics of each ball, determine the
-					corresponding binary digit from the table below.
+					Use the 4 characteristics of each ball to find its matching binary digit in the table,
+					then join the digits in the exact
+					order the balls were juggled.
 				</p>
 				<table class="binary-table">
 					<tbody>
@@ -232,18 +233,17 @@
 
 				<ul class="juggle-amount">
 					<li>
-						If the amount of balls moving to the right is greater than balls
-						that are rotating counterclockwise, juggle according to how many
-						1s are in your binary string.
+						If more balls move to the right than rotate counterclockwise,
+						juggle according to the number of 1s in your binary
+						string.
 					</li>
 					<li>
-						Otherwise, if the amount of balls moving to the left is greater
-						than balls that are rotating clockwise, juggle based on the number
-						of 0s in your binary string.
+						Otherwise, if more balls move to the left than rotate clockwise,
+						juggle according to the number of 0s in your binary
+						string.
 					</li>
 					<li>
-						Otherwise, juggle based on the difference between the number of 1s
-						and 0s.
+						Otherwise, juggle based on the difference between the number of 1s and 0s.
 					</li>
 				</ul>
 			</div>
@@ -259,8 +259,7 @@
 				<h3>How to Juggle numbers the correct way</h3>
 				<ol>
 					<li>
-						To juggle the binary string, split the string in the middle into
-						two equal halves.
+						Split the binary string into two equal halves.
 					</li>
 				</ol>
 
@@ -272,8 +271,8 @@
 
 				<ol start="2">
 					<li>
-						For each juggle, take the leftmost digit of the right half and
-						append it to the left side of the left half.
+						For each juggle, take the leftmost digit of the right half and place it at the front of the left
+						half.
 					</li>
 				</ol>
 
@@ -289,8 +288,7 @@
 
 				<ol start="3">
 					<li>
-						Then take the rightmost digit of the left half and append it to
-						the right side of the right half.
+						Then take the rightmost digit of the left half and place it at the end of the right half.
 					</li>
 				</ol>
 
@@ -305,10 +303,9 @@
 				</div>
 
 				<p>
-					Repeat steps 2 and 3 according to your determined juggle amount.
-					After you finish juggling, join the two halves back together and
-					press every ball whose position corresponds to a 1 in the final
-					binary string. When all the correct balls are pressed, the module is
+					Repeat steps 2 and 3 the required number of times. Afterward, merge the two halves into a single
+					binary string and press
+					every ball whose position matches a 1. Once all correct balls are pressed, the current stage is
 					solved.
 				</p>
 			</div>

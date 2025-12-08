@@ -92,15 +92,13 @@ public class BinaryJuggle : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            int position = i + 1;
-
             // Getting a Random Enum through indexing
             var color = GetRandomEnum<BallColor>();
             var symbol = GetRandomEnum<Symbol>();
             var rotation = GetRandomEnum<Rotation>();
             var direction = GetRandomEnum<BallDirection>();
 
-            list.Add(new Ball(color, symbol, rotation, direction, position));
+            list.Add(new Ball(color, symbol, rotation, direction));
         }
         return list;
     }
@@ -394,6 +392,7 @@ public class BinaryJuggle : MonoBehaviour
             if (firstBallList[index].needsClick)
             {
                 firstBallList[index].needsClick = false;
+                BallsStage1[index].GetComponent<MeshRenderer>().material.color = new Color(1, 1, 1);
 
                 if (firstBallList.Where(x => x.needsClick).Count() == 0)
                 {
@@ -411,6 +410,8 @@ public class BinaryJuggle : MonoBehaviour
             if (secondBallList[index - 6].needsClick)
             {
                 secondBallList[index - 6].needsClick = false;
+                BallsStage2[index - 6].GetComponent<MeshRenderer>().material.color = new Color(1, 1, 1);
+
                 if (secondBallList.Where(x => x.needsClick).Count() == 0)
                 {
                     Stage++;
@@ -469,6 +470,7 @@ public class BinaryJuggle : MonoBehaviour
 
     void Strike()
     {
+        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.Strike, transform);
         GetComponent<KMBombModule>().HandleStrike();
     }
 #pragma warning disable 414

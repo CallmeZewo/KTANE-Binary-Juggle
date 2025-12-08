@@ -8,7 +8,6 @@ public class Ball
     public Symbol symbol;
     public Rotation rotation;
     public BallDirection direction;
-    public int position;
     public bool isOne;
     public bool needsClick;
 
@@ -89,13 +88,12 @@ public class Ball
     };
 
 
-    public Ball(BallColor col, Symbol sym, Rotation rot, BallDirection dir, int pos)
+    public Ball(BallColor col, Symbol sym, Rotation rot, BallDirection dir)
     {
         color = col;
         symbol = sym;
         rotation = rot;
         direction = dir;
-        position = pos;
         isOne = Table[(int)col, (int)sym, (int)rot, (int)dir];
     }
 }
