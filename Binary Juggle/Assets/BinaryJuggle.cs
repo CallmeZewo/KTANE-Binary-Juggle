@@ -21,6 +21,7 @@ public class BinaryJuggle : MonoBehaviour
 
     void Awake()
     { //Avoid doing calculations in here regarding edgework. Just use this for setting up buttons for simplicity.
+        GetComponent<KMBombModule>().OnActivate += delegate { Activate(); };
         moduleId = moduleIdCounter++;
 
         cbActive = Colorblind.ColorblindModeActive;
@@ -30,13 +31,16 @@ public class BinaryJuggle : MonoBehaviour
         }
     }
 
+    void Activate()
+    {
+        StartCoroutine(AnimateBlendShape(SkinnedMeshRendererCurtain, 0, 100, 4.5f));
+        ManageLoopingCycle();
+    }
 
     void Start()
     { //Shit that you calculate, usually a majority if not all of the module
         GenerateCycle();
         AssignToBalls();
-        StartCoroutine(AnimateBlendShape(SkinnedMeshRendererCurtain, 0, 100, 4.5f));
-        ManageLoopingCycle();
     }
 
     #region Getting Randoms
@@ -277,6 +281,8 @@ public class BinaryJuggle : MonoBehaviour
 
     bool CWRotation;
 
+    float height = 0.09f;
+
     void MoveBall(GameObject ball, BallDirection dir, Rotation rot)
     {
         Transform start = dir == BallDirection.Left ? startRight : startLeft;
@@ -294,7 +300,7 @@ public class BinaryJuggle : MonoBehaviour
         // place ball at local start
         ball.transform.localPosition = localStart;
 
-        StartCoroutine(MoveParabola(ball.transform, transform, localStart, localEnd, 0.08f, CWRotation));
+        StartCoroutine(MoveParabola(ball.transform, transform, localStart, localEnd, height, CWRotation));
     }
 
     public void ManageLoopingCycle()
@@ -350,28 +356,28 @@ public class BinaryJuggle : MonoBehaviour
             totalYRotation = Rnd.Range(-270f, -360f);
 
         while (elapsed < duration)
-            {
-                float t = elapsed / duration;
+        {
+            float t = elapsed / duration;
 
-                // get start/end in world space relative to reference
-                Vector3 worldStart = reference.TransformPoint(localStart);
-                Vector3 worldEnd = reference.TransformPoint(localEnd);
+            // get start/end in world space relative to reference
+            Vector3 worldStart = reference.TransformPoint(localStart);
+            Vector3 worldEnd = reference.TransformPoint(localEnd);
 
-                // linear movement
-                Vector3 pos = Vector3.Lerp(worldStart, worldEnd, t);
+            // linear movement
+            Vector3 pos = Vector3.Lerp(worldStart, worldEnd, t);
 
-                // height offset while moving across
-                pos += reference.forward * (height * 4f * t * (1f - t));
+            // height offset while moving across
+            pos += reference.forward * (height * 4f * t * (1f - t));
+            
+            target.position = pos;
 
-                target.position = pos;
+            // rotate along Y axis
+            float currentY = Mathf.Lerp(0f, totalYRotation, t);
+            target.localRotation = Quaternion.Euler(target.localEulerAngles.x, initialY + currentY, target.localEulerAngles.z);
 
-                // rotate along Y axis
-                float currentY = Mathf.Lerp(0f, totalYRotation, t);
-                target.localRotation = Quaternion.Euler(target.localEulerAngles.x, initialY + currentY, target.localEulerAngles.z);
-
-                elapsed += Time.deltaTime;
-                yield return null;
-            }
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
 
         // snap to final position
         target.position = reference.TransformPoint(localEnd + new Vector3(0, -0.05f, 0));
@@ -383,14 +389,14 @@ public class BinaryJuggle : MonoBehaviour
 
     void InputHandler(KMSelectable button)
     {
-        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, button.transform);
-
         int index = Array.IndexOf(Buttons, button);
 
         if (Stage == 1)
         {
             if (firstBallList[index].needsClick)
             {
+                Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, button.transform);
+
                 firstBallList[index].needsClick = false;
                 BallsStage1[index].GetComponent<MeshRenderer>().material.color = new Color(1, 1, 1);
 
@@ -409,6 +415,8 @@ public class BinaryJuggle : MonoBehaviour
             if (index < 6) return;
             if (secondBallList[index - 6].needsClick)
             {
+                Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, button.transform);
+
                 secondBallList[index - 6].needsClick = false;
                 BallsStage2[index - 6].GetComponent<MeshRenderer>().material.color = new Color(1, 1, 1);
 
