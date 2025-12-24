@@ -311,7 +311,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4754677442933958}
   m_Layer: 0
-  m_Name: endLeft
+  m_Name: peakHeight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -749,6 +749,21 @@ GameObject:
   - component: {fileID: 114022413557314624}
   m_Layer: 0
   m_Name: Balls 1.2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1792136621996436
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4629628973542098}
+  m_Layer: 0
+  m_Name: endLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1519,6 +1534,19 @@ Transform:
   m_Father: {fileID: 4282587266284754}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4629628973542098
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1792136621996436}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.025, y: 0.02, z: -0.065}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4799546364725194}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4686359590767292
 Transform:
   m_ObjectHideFlags: 1
@@ -1591,11 +1619,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1255675714773436}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.025, y: 0.02, z: -0.065}
+  m_LocalPosition: {x: 0, y: 0.02, z: 0.0275}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4799546364725194}
-  m_RootOrder: 18
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4765764397650148
 Transform:
@@ -1638,6 +1666,7 @@ Transform:
   - {fileID: 4513912186673696}
   - {fileID: 4271872863934758}
   - {fileID: 4115531406056806}
+  - {fileID: 4629628973542098}
   - {fileID: 4754677442933958}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -4328,7 +4357,8 @@ MonoBehaviour:
   startRight: {fileID: 4513912186673696}
   startLeft: {fileID: 4271872863934758}
   endRight: {fileID: 4115531406056806}
-  endLeft: {fileID: 4754677442933958}
+  endLeft: {fileID: 4629628973542098}
+  peakHeight: {fileID: 4754677442933958}
   SkinnedMeshRendererCurtain: {fileID: 137842129066062272}
 --- !u!114 &114936477104338726
 MonoBehaviour:
