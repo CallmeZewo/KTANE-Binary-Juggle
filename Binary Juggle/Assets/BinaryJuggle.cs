@@ -278,10 +278,9 @@ public class BinaryJuggle : MonoBehaviour
     public Transform startLeft;     // -0.0575f, 0.021f, -0.065f
     public Transform endRight;      // 0.04f, 0.021f, -0.065f
     public Transform endLeft;       // -0.04f, 0.021f, -0.065f
+    public Transform peakHeight;
 
     bool CWRotation;
-
-    float height = 0.09f;
 
     void MoveBall(GameObject ball, BallDirection dir, Rotation rot)
     {
@@ -300,7 +299,7 @@ public class BinaryJuggle : MonoBehaviour
         // place ball at local start
         ball.transform.localPosition = localStart;
 
-        StartCoroutine(MoveParabola(ball.transform, transform, localStart, localEnd, height, CWRotation));
+        StartCoroutine(MoveParabola(ball.transform, transform, localStart, localEnd, peakHeight, CWRotation));
     }
 
     public void ManageLoopingCycle()
@@ -342,7 +341,7 @@ public class BinaryJuggle : MonoBehaviour
         }
     }
 
-    public IEnumerator MoveParabola(Transform target, Transform reference, Vector3 localStart, Vector3 localEnd, float height, bool CWRotation)
+    public IEnumerator MoveParabola(Transform target, Transform reference, Vector3 localStart, Vector3 localEnd, Transform peakHeight, bool CWRotation)
     {
         float duration = 3f;
         float elapsed = 0f;
@@ -359,17 +358,29 @@ public class BinaryJuggle : MonoBehaviour
         {
             float t = elapsed / duration;
 
-            // get start/end in world space relative to reference
-            Vector3 worldStart = reference.TransformPoint(localStart);
-            Vector3 worldEnd = reference.TransformPoint(localEnd);
+            // convert start, end, peak into reference local space
+            Vector3 start = localStart;
+            Vector3 end = localEnd;
+            Vector3 peak = reference.InverseTransformPoint(peakHeight.position);
 
-            // linear movement
-            Vector3 pos = Vector3.Lerp(worldStart, worldEnd, t);
+            // linear movement (local)
+            Vector3 pos = Vector3.Lerp(start, end, t);
 
-            // height offset while moving across
-            pos += reference.forward * (height * 4f * t * (1f - t));
-            
-            target.position = pos;
+            // baseline Z
+            float baseZ = Mathf.Lerp(start.z, end.z, t);
+
+            // arc curve
+            float arc = 4f * t * (1f - t);
+
+            // ensure peak height at t = 0.5
+            float midBaseZ = (start.z + end.z) * 0.5f;
+            float requiredOffset = peak.z - midBaseZ;
+
+            // final Z
+            pos.z = baseZ + arc * requiredOffset;
+
+            // convert back to world
+            target.position = reference.TransformPoint(pos);
 
             // rotate along Y axis
             float currentY = Mathf.Lerp(0f, totalYRotation, t);
